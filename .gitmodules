@@ -1,0 +1,3 @@
+[submodule "ditcoin"]
+	path = ditcoin
+	url = https://github.com/ditcoin/ditcoin-core.git

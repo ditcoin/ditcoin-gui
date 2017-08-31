@@ -1,0 +1,6 @@
+*.user
+*.user.*
+.vscode
+translations/*.qm
+build
+version.js
