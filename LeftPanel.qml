@@ -378,7 +378,6 @@ Rectangle {
             // ------------- Mining tab ---------------
             MenuButton {
                 id: miningButton
-                present: false
                 anchors.left: parent.left
                 anchors.right: parent.right
                 text: qsTr("Mining") + translationManager.emptyString
