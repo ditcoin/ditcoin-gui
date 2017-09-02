@@ -220,6 +220,7 @@ bool DaemonManager::sendCommand(const QString &cmd,bool testnet, QString &messag
         external_cmd += " --testnet";
     external_cmd += "\n";
 
+    p.setWorkingDirectory(QApplication::applicationDirPath());
     p.start(external_cmd);
 
     bool started = p.waitForFinished(-1);
@@ -240,9 +241,9 @@ DaemonManager::DaemonManager(QObject *parent)
 
     // Platform depetent path to ditcoind
 #ifdef Q_OS_WIN
-    m_monerod = QApplication::applicationDirPath() + "/ditcoind.exe";
+    m_monerod = "./ditcoind.exe";
 #elif defined(Q_OS_UNIX)
-    m_monerod = QApplication::applicationDirPath() + "/ditcoind";
+    m_monerod = "./ditcoind";
 #endif
 
     if (m_monerod.length() == 0) {
