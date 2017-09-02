@@ -17,7 +17,7 @@ if [ ! -d $MONERO_DIR/src ]; then
 fi
 git submodule update
 git -C $MONERO_DIR fetch --tags
-git -C $MONERO_DIR checkout v0.12.0
+git -C $MONERO_DIR checkout v0.13.0
 
 # get ditcoin core tag
 get_tag
