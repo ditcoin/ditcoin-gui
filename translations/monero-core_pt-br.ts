@@ -1772,8 +1772,8 @@ Por favor atualize ou conecte outro daemon</translation>
     </message>
     <message>
         <location filename="../wizard/WizardDonation.qml" line="164"/>
-        <source>For every transaction, a small transaction fee is charged. This option lets you add an additional amount, as a percentage of that fee, to your transaction to support Ditcoin development. For instance, a 50% autodonation take a transaction fee of 0.005 DIT and add a 0.0025 DIT to support Ditcoin development.</source>
-        <translation>Para cada transação uma pequena taxa é coletada. Esta opção permite você adicionar uma quantidade adicional como porcentagem desta taxa para ajudar o desenvolvimento do Ditcoin. Por exemplo, 50% de auto-doação em uma taxa de transferência de 0.005 DIT adicionará 0.0025 DIT a taxa para ajudar o desenvolvimento do Ditcoin.</translation>
+        <source>For every transaction, a small transaction fee is charged. This option lets you add an additional amount, as a percentage of that fee, to your transaction to support Ditcoin development. For instance, a 50% autodonation take a transaction fee of 0.005 DTC and add a 0.0025 DTC to support Ditcoin development.</source>
+        <translation>Para cada transação uma pequena taxa é coletada. Esta opção permite você adicionar uma quantidade adicional como porcentagem desta taxa para ajudar o desenvolvimento do Ditcoin. Por exemplo, 50% de auto-doação em uma taxa de transferência de 0.005 DTC adicionará 0.0025 DTC a taxa para ajudar o desenvolvimento do Ditcoin.</translation>
     </message>
     <message>
         <location filename="../wizard/WizardDonation.qml" line="176"/>

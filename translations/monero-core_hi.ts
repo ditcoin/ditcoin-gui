@@ -1720,8 +1720,8 @@ Please upgrade or connect to another daemon</source>
     </message>
     <message>
         <location filename="../wizard/WizardDonation.qml" line="164"/>
-        <source>For every transaction, a small transaction fee is charged. This option lets you add an additional amount, as a percentage of that fee, to your transaction to support Ditcoin development. For instance, a 50% autodonation take a transaction fee of 0.005 DIT and add a 0.0025 DIT to support Ditcoin development.</source>
-        <translation>प्रत्येक लेनदेन के लिए एक छोटा शुल्क लगाया जाता है। यह विकल्प आपको Ditcoin का विकास समर्थित करने के लिए अपने लेनदेन में शुल्क के प्रतिशत के रूप में एक अतिरिक्त राशि जोड़ने की अनुमति देता है। उदाहरण के लिए, 50% ऑटो-डोनेशन 0.005 DIT का लेनदेन शुल्क लेता है और Ditcoin के विकास को समर्थित करने के लिए 0.0025 DIT जोड़ता है।</translation>
+        <source>For every transaction, a small transaction fee is charged. This option lets you add an additional amount, as a percentage of that fee, to your transaction to support Ditcoin development. For instance, a 50% autodonation take a transaction fee of 0.005 DTC and add a 0.0025 DTC to support Ditcoin development.</source>
+        <translation>प्रत्येक लेनदेन के लिए एक छोटा शुल्क लगाया जाता है। यह विकल्प आपको Ditcoin का विकास समर्थित करने के लिए अपने लेनदेन में शुल्क के प्रतिशत के रूप में एक अतिरिक्त राशि जोड़ने की अनुमति देता है। उदाहरण के लिए, 50% ऑटो-डोनेशन 0.005 DTC का लेनदेन शुल्क लेता है और Ditcoin के विकास को समर्थित करने के लिए 0.0025 DTC जोड़ता है।</translation>
     </message>
     <message>
         <location filename="../wizard/WizardDonation.qml" line="176"/>

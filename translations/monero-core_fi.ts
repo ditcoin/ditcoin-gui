@@ -1756,8 +1756,8 @@ Please upgrade or connect to another daemon</source>
     </message>
     <message>
         <location filename="../wizard/WizardDonation.qml" line="164"/>
-        <source>For every transaction, a small transaction fee is charged. This option lets you add an additional amount, as a percentage of that fee, to your transaction to support Ditcoin development. For instance, a 50% autodonation take a transaction fee of 0.005 DIT and add a 0.0025 DIT to support Ditcoin development.</source>
-        <translation>Jokaisesta rahansiirrosta peritään pieni maksu, siirtopalkkio, sen lähettämiseksi. Tällä vaihtoehdolla voit lisätä vaihtoehtoisen lahjoituksen maksuun Ditcoinn kehityksen edistämiseksi. Jos esimerkiksi valitset 50%, lisätään 0.005 DIT:n siirtopalkkioon 0.0025 DIT joka lahjoitetaan Ditcoinn kehittäjille. </translation>
+        <source>For every transaction, a small transaction fee is charged. This option lets you add an additional amount, as a percentage of that fee, to your transaction to support Ditcoin development. For instance, a 50% autodonation take a transaction fee of 0.005 DTC and add a 0.0025 DTC to support Ditcoin development.</source>
+        <translation>Jokaisesta rahansiirrosta peritään pieni maksu, siirtopalkkio, sen lähettämiseksi. Tällä vaihtoehdolla voit lisätä vaihtoehtoisen lahjoituksen maksuun Ditcoinn kehityksen edistämiseksi. Jos esimerkiksi valitset 50%, lisätään 0.005 DTC:n siirtopalkkioon 0.0025 DTC joka lahjoitetaan Ditcoinn kehittäjille. </translation>
     </message>
     <message>
         <location filename="../wizard/WizardDonation.qml" line="176"/>

@@ -1795,7 +1795,7 @@ Please upgrade or connect to another daemon</source>
     </message>
     <message>
         <location filename="../wizard/WizardDonation.qml" line="164"/>
-        <source>For every transaction, a small transaction fee is charged. This option lets you add an additional amount, as a percentage of that fee, to your transaction to support Ditcoin development. For instance, a 50% autodonation take a transaction fee of 0.005 DIT and add a 0.0025 DIT to support Ditcoin development.</source>
+        <source>For every transaction, a small transaction fee is charged. This option lets you add an additional amount, as a percentage of that fee, to your transaction to support Ditcoin development. For instance, a 50% autodonation take a transaction fee of 0.005 DTC and add a 0.0025 DTC to support Ditcoin development.</source>
         <translation>取引には少額の手数料がかかります。このオプションはその手数料に加えて、手数料の何パーセントかをモネロの開発チームへの寄付として支払うことを許可します。例えば自動寄付の割合が50%で、取引の手数料が0.005 DITであった場合、0.0025 DITが開発チームへの寄付として取引に上乗せされます。</translation>
     </message>
     <message>
