@@ -1748,8 +1748,8 @@ Ringsize: </source>
     </message>
     <message>
         <location filename="../wizard/WizardDonation.qml" line="164"/>
-        <source>For every transaction, a small transaction fee is charged. This option lets you add an additional amount, as a percentage of that fee, to your transaction to support Ditcoin development. For instance, a 50% autodonation take a transaction fee of 0.005 DIT and add a 0.0025 DIT to support Ditcoin development.</source>
-        <translation>Per ogni transazione si paga una piccola commissione. Questa opzione ti permette di aggiungere un importo addizionale per supportare lo sviluppo di Ditcoin. Per esempio, con una autodonazione del 50% si paga 0.005 DIT di commissioni e altri 0.0025 per il supporto allo sviluppo di Ditcoin.</translation>
+        <source>For every transaction, a small transaction fee is charged. This option lets you add an additional amount, as a percentage of that fee, to your transaction to support Ditcoin development. For instance, a 50% autodonation take a transaction fee of 0.005 DTC and add a 0.0025 DTC to support Ditcoin development.</source>
+        <translation>Per ogni transazione si paga una piccola commissione. Questa opzione ti permette di aggiungere un importo addizionale per supportare lo sviluppo di Ditcoin. Per esempio, con una autodonazione del 50% si paga 0.005 DTC di commissioni e altri 0.0025 per il supporto allo sviluppo di Ditcoin.</translation>
     </message>
     <message>
         <location filename="../wizard/WizardDonation.qml" line="176"/>

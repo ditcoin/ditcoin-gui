@@ -163,7 +163,7 @@ Item {
             wrapMode: Text.Wrap
             text: qsTr("For every transaction, a small transaction fee is charged. This option lets you add an additional amount, " +
                        "as a percentage of that fee, to your transaction to support Ditcoin development. For instance, a 50% " +
-                       "autodonation take a transaction fee of 0.005 DIT and add a 0.0025 DIT to support Ditcoin development.")
+                       "autodonation take a transaction fee of 0.005 DTC and add a 0.0025 DTC to support Ditcoin development.")
                     + translationManager.emptyString
         }
         Column {
