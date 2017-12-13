@@ -35,7 +35,7 @@ Rectangle {
     property int mouseX: 0
     property bool containsMouse: false
     property alias basicButtonVisible: goToBasicVersionButton.visible
-    property bool customDecorations: true
+    property bool customDecorations: false
     signal goToBasicVersion(bool yes)
     height: customDecorations ? 30 : 0
     y: -height
