@@ -853,7 +853,7 @@ ApplicationWindow {
         property string payment_id
         property int    restore_height : 0
         property bool   is_recovering : false
-        property bool   customDecorations : true
+        property bool   customDecorations : false
         property string daemonFlags
         property int logLevel: 0
         property string logCategories: ""
