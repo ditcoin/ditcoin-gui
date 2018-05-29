@@ -234,7 +234,7 @@ begin
   WizardForm.WizardBitmapImage2.Bitmap.LoadFromFile(ExpandConstant('{tmp}\FinishImage.bmp'));
 
   // Additional wizard page for entering a special blockchain location
-  blockChainDefaultDir := ExpandConstant('{commonappdata}\bitmonero');
+  blockChainDefaultDir := ExpandConstant('{commonappdata}\ditcoin');
   s := 'The default folder to store the Ditcoin blockchain is ' + blockChainDefaultDir;
   s := s + '. As this will need more than 30 GB of free space, you may want to use a folder on a different drive.';
   s := s + ' If yes, specify that folder here.';
@@ -284,7 +284,7 @@ end;
 function DaemonLog(Param: String) : String;
 // Full filename of the log of the daemon
 begin
-  Result := BlockChainDir('') + '\bitmonero.log';
+  Result := BlockChainDir('') + '\ditcoin.log';
   // No quotes for filename with blanks as this is never used as part of a command line
 end;
 
