@@ -334,7 +334,7 @@ bool WalletManager::saveQrCode(const QString &code, const QString &path) const
 void WalletManager::checkUpdatesAsync(const QString &software) const
 {
     QFuture<QString> future = QtConcurrent::run(this, &WalletManager::checkUpdates,
-                                        software, subdir);
+                                        software);
     QFutureWatcher<QString> * watcher = new QFutureWatcher<QString>();
     connect(watcher, &QFutureWatcher<Wallet*>::finished,
             this, [this, watcher]() {
@@ -351,7 +351,7 @@ void WalletManager::checkUpdatesAsync(const QString &software) const
 QString WalletManager::checkUpdates(const QString &software) const
 {
   qDebug() << "Checking for updates";
-  const std::tuple<bool, std::string, std::string, std::string, std::string> result = Monero::WalletManager::checkUpdates(software.toStdString(), subdir.toStdString());
+  const std::tuple<bool, std::string, std::string, std::string, std::string> result = Monero::WalletManager::checkUpdates(software.toStdString());
   if (!std::get<0>(result))
     return QString("");
   return QString::fromStdString(std::get<1>(result) + "|" + std::get<2>(result) + "|" + std::get<3>(result) + "|" + std::get<4>(result));

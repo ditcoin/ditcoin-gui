@@ -2158,7 +2158,7 @@ Descripción:</translation>
     <message>
         <location filename="../main.qml" line="1355"/>
         <source>New version of ditcoin-wallet-gui is available: %1&lt;br&gt;%2</source>
-    < translation > Nueva versión de ditcoin-wallet-gui disponible: %1&lt;br&gt;%2</translation>
+        <translation>Nueva versión de ditcoin-wallet-gui disponible: %1&lt;br&gt;%2</translation>
     </message>
 </context>
 </TS>
