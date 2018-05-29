@@ -235,7 +235,7 @@ bool DaemonManager::sendCommand(const QString &cmd,bool testnet, QString &messag
     qDebug() << "sending external cmd: " << external_cmd;
 
     p.setWorkingDirectory(QApplication::applicationDirPath());
-    p.start(external_cmd);
+    p.start(m_monerod, external_cmd);
 
     bool started = p.waitForFinished(-1);
     message = p.readAllStandardOutput();
