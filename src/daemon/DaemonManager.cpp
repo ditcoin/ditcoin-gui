@@ -8,6 +8,10 @@
 #include <QApplication>
 #include <QProcess>
 #include <QTime>
+#include <QStorageInfo>
+#include <QVariantMap>
+#include <QVariant>
+#include <QMap>
 
 namespace {
     static const int DAEMON_START_TIMEOUT_SECONDS = 30;
@@ -28,7 +32,7 @@ DaemonManager *DaemonManager::instance(const QStringList *args)
     return m_instance;
 }
 
-bool DaemonManager::start(const QString &flags, bool testnet)
+bool DaemonManager::start(const QString &flags, bool testnet, const QString &dataDir)
 {
     // prepare command line arguments and pass to ditcoind
     QStringList arguments;
@@ -52,6 +56,15 @@ bool DaemonManager::start(const QString &flags, bool testnet)
           qDebug() << QString(" [%1] ").arg(str);
           if (!str.isEmpty())
             arguments << str;
+    }
+
+    // Custom data-dir
+    if(!dataDir.isEmpty()) {
+        if(testnet)
+            arguments << "--testnet-data-dir";
+        else
+            arguments << "--data-dir";
+        arguments << dataDir;
     }
 
     arguments << "--check-updates" << "disabled";
@@ -212,13 +225,14 @@ bool DaemonManager::sendCommand(const QString &cmd,bool testnet) const
 bool DaemonManager::sendCommand(const QString &cmd,bool testnet, QString &message) const
 {
     QProcess p;
-    QString external_cmd = m_monerod + " " + cmd;
-    qDebug() << "sending external cmd: " << external_cmd;
+    QStringList external_cmd;
+    external_cmd << cmd;
 
     // Add testnet flag if needed
     if (testnet)
-        external_cmd += " --testnet";
-    external_cmd += "\n";
+        external_cmd << "--testnet";
+
+    qDebug() << "sending external cmd: " << external_cmd;
 
     p.setWorkingDirectory(QApplication::applicationDirPath());
     p.start(external_cmd);
@@ -233,6 +247,44 @@ void DaemonManager::exit()
 {
     qDebug("DaemonManager: exit()");
     m_app_exit = true;
+}
+
+QVariantMap DaemonManager::validateDataDir(const QString &dataDir) const
+{
+    QVariantMap result;
+    bool valid = true;
+    bool readOnly = false;
+    int  storageAvailable = 0;
+    bool lmdbExists = true;
+
+    QStorageInfo storage(dataDir);
+    if (storage.isValid() && storage.isReady()) {
+        if (storage.isReadOnly()) {
+            readOnly = true;
+            valid = false;
+        }
+
+        // Make sure there is 20GB storage available
+        storageAvailable = storage.bytesAvailable()/1000/1000/1000;
+        if (storageAvailable < 20) {
+            valid = false;
+        }
+    } else {
+        valid = false;
+    }
+
+
+    if (!QDir(dataDir+"/lmdb").exists()) {
+        lmdbExists = false;
+        valid = false;
+    }
+
+    result.insert("valid", valid);
+    result.insert("lmdbExists", lmdbExists);
+    result.insert("readOnly", readOnly);
+    result.insert("storageAvailable", storageAvailable);
+
+    return result;
 }
 
 DaemonManager::DaemonManager(QObject *parent)

@@ -65,7 +65,7 @@ if [[ $platform == *bsd* ]]; then
 fi
 
 # build libwallet
-$SHELL get_libwallet_api.sh $BUILD_TYPE
+./get_libwallet_api.sh $BUILD_TYPE
  
 # build zxcvbn
 $MAKE -C src/zxcvbn-c || exit
@@ -89,11 +89,11 @@ fi
 
 # force version update
 get_tag
-echo "var GUI_VERSION = \"$VERSIONTAG\"" > version.js
+echo "var GUI_VERSION = \"$TAGNAME\"" > version.js
 pushd "$MONERO_DIR"
 get_tag
 popd
-echo "var GUI_MONERO_VERSION = \"$VERSIONTAG\"" >> version.js
+echo "var GUI_MONERO_VERSION = \"$TAGNAME\"" >> version.js
 
 cd build
 qmake ../ditcoin-wallet-gui.pro "$CONFIG" || exit

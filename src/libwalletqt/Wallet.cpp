@@ -207,6 +207,7 @@ void Wallet::initAsync(const QString &daemonAddress, quint64 upperTransactionLim
         QFuture<bool> future = watcher->future();
         watcher->deleteLater();
         if(future.result()){
+            emit walletCreationHeightChanged();
             qDebug() << "init async finished - starting refresh";
             connected(true);
             m_walletImpl->startRefresh();
@@ -597,6 +598,22 @@ bool Wallet::useForkRules(quint8 required_version, quint64 earlyBlocks) const
         qDebug() << e.what();
         return false;
     }
+}
+
+void Wallet::setWalletCreationHeight(quint64 height)
+{
+    m_walletImpl->setRefreshFromBlockHeight(height);
+    emit walletCreationHeightChanged();
+}
+
+QString Wallet::getDaemonLogPath() const
+{
+    return QString::fromStdString(m_walletImpl->getDefaultDataDir()) + "/bitmonero.log";
+}
+
+QString Wallet::getWalletLogPath() const
+{
+    return QCoreApplication::applicationDirPath() + "/monero-wallet-gui.log";
 }
 
 Wallet::Wallet(Monero::Wallet *w, QObject *parent)

@@ -40,6 +40,7 @@ import moneroComponents.Clipboard 1.0
 Rectangle {
     property var daemonAddress
     property bool viewOnly: false
+    id: page
 
     color: "#F0EEEE"
 
@@ -54,10 +55,9 @@ Rectangle {
         // try connecting to daemon
     }
 
-
     ColumnLayout {
         id: mainLayout
-        anchors.margins: 40
+        anchors.margins: 17
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.right: parent.right
@@ -81,7 +81,8 @@ Rectangle {
             color: "#DEDEDE"
         }
 
-        RowLayout {
+        GridLayout {
+            columns: (isMobile)? 2 : 4
             StandardButton {
                 id: closeWalletButton
                 text: qsTr("Close wallet") + translationManager.emptyString
@@ -116,9 +117,69 @@ Rectangle {
                 shadowPressedColor: "#0B8008"
                 releasedColor: "#12b20E"
                 pressedColor: "#05CE00"
-                text: qsTr("Show seed") + translationManager.emptyString
+                text: qsTr("Show seed & keys") + translationManager.emptyString
                 onClicked: {
                     settingsPasswordDialog.open();
+                }
+            }
+
+/*          Rescan cache - Disabled until we know it's needed
+
+            StandardButton {
+                id: rescanWalletbutton
+                shadowReleasedColor: "#FF4304"
+                shadowPressedColor: "#B32D00"
+                releasedColor: "#FF6C3C"
+                pressedColor: "#FF4304"
+                text: qsTr("Rescan wallet cache") + translationManager.emptyString
+                onClicked: {
+                    // Show confirmation dialog
+                    confirmationDialog.title = qsTr("Rescan wallet cache") + translationManager.emptyString;
+                    confirmationDialog.text  = qsTr("Are you sure you want to rebuild the wallet cache?\n"
+                                                    + "The following information will be deleted\n"
+                                                    + "- Recipient addresses\n"
+                                                    + "- Tx keys\n"
+                                                    + "- Tx descriptions\n\n"
+                                                    + "The old wallet cache file will be renamed and can be restored later.\n"
+                                                    );
+                    confirmationDialog.icon = StandardIcon.Question
+                    confirmationDialog.cancelText = qsTr("Cancel")
+                    confirmationDialog.onAcceptedCallback = function() {
+                        walletManager.closeWallet();
+                        walletManager.clearWalletCache(persistentSettings.wallet_path);
+                        walletManager.openWalletAsync(persistentSettings.wallet_path, appWindow.password,
+                                                          persistentSettings.testnet);
+                    }
+
+                    confirmationDialog.onRejectedCallback = null;
+
+                    confirmationDialog.open()
+
+                }
+            }
+*/
+            StandardButton {
+                id: rescanSpentButton
+                text: qsTr("Rescan wallet balance") + translationManager.emptyString
+                shadowReleasedColor: "#FF4304"
+                shadowPressedColor: "#B32D00"
+                releasedColor: "#FF6C3C"
+                pressedColor: "#FF4304"
+                onClicked: {
+                    if (!currentWallet.rescanSpent()) {
+                        console.error("Error: ", currentWallet.errorString);
+                        informationPopup.title = qsTr("Error") + translationManager.emptyString;
+                        informationPopup.text  = qsTr("Error: ") + currentWallet.errorString
+                        informationPopup.icon  = StandardIcon.Critical
+                        informationPopup.onCloseCallback = null
+                        informationPopup.open();
+                    } else {
+                        informationPopup.title = qsTr("Information") + translationManager.emptyString
+                        informationPopup.text  = qsTr("Sucessfully rescanned spent outputs") + translationManager.emptyString
+                        informationPopup.icon  = StandardIcon.Information
+                        informationPopup.onCloseCallback = null
+                        informationPopup.open();
+                    }
                 }
             }
         }
@@ -141,10 +202,9 @@ Rectangle {
             color: "#DEDEDE"
         }
 
-        RowLayout {
+        GridLayout {
             id: daemonStatusRow
-            Layout.fillWidth: true
-
+            columns: (isMobile) ?  2 : 4
             StandardButton {
                 visible: true
                 enabled: !appWindow.daemonRunning
@@ -187,8 +247,35 @@ Rectangle {
                 }
             }
 
+        }
 
+        RowLayout {
+            id: blockchainFolderRow
+            Label {
+                id: blockchainFolderLabel
+                color: "#4A4949"
+                text: qsTr("Blockchain location") + translationManager.emptyString
+                fontSize: 16
+            }
+            LineEdit {
+                id: blockchainFolder
+                Layout.preferredWidth:  200
+                Layout.fillWidth: true
+                text: persistentSettings.blockchainDataDir
+                placeholderText: qsTr("(optional)") + translationManager.emptyString
 
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        mouse.accepted = false
+                        if(persistentSettings.blockchainDataDir != "")
+                            blockchainFileDialog.folder = "file://" + persistentSettings.blockchainDataDir
+                        blockchainFileDialog.open()
+                        blockchainFolder.focus = true
+                    }
+                }
+
+            }
         }
 
         RowLayout {
@@ -209,22 +296,27 @@ Rectangle {
         }
 
         RowLayout {
-            id: daemonAddrRow
             Layout.fillWidth: true
             spacing: 10
 
             Label {
                 id: daemonAddrLabel
-
                 Layout.fillWidth: true
                 color: "#4A4949"
                 text: qsTr("Daemon address") + translationManager.emptyString
                 fontSize: 16
             }
+        }
+
+        GridLayout {
+            id: daemonAddrRow
+            Layout.fillWidth: true
+            columnSpacing: 10
+            columns: (isMobile) ?  2 : 3
 
             LineEdit {
                 id: daemonAddr
-                Layout.preferredWidth:  200
+                Layout.preferredWidth:  100
                 Layout.fillWidth: true
                 text: (daemonAddress !== undefined) ? daemonAddress[0] : ""
                 placeholderText: qsTr("Hostname / IP") + translationManager.emptyString
@@ -241,7 +333,8 @@ Rectangle {
         }
 
         RowLayout {
-
+            Layout.fillWidth: true
+            spacing: 10
             Label {
                 id: daemonLoginLabel
                 Layout.fillWidth: true
@@ -249,6 +342,10 @@ Rectangle {
                 text: qsTr("Login (optional)") + translationManager.emptyString
                 fontSize: 16
             }
+
+        }
+
+        RowLayout {
 
             LineEdit {
                 id: daemonUsername
@@ -277,7 +374,6 @@ Rectangle {
                 shadowPressedColor: "#0B8008"
                 releasedColor: "#12b20E"
                 pressedColor: "#05CE00"
-                visible: true
                 onClicked: {
                     console.log("saving daemon adress settings")
                     var newDaemon = daemonAddr.text.trim() + ":" + daemonPort.text.trim()
@@ -323,14 +419,22 @@ Rectangle {
         }
 
         // Log level
+
         RowLayout {
             Label {
-                id: logLevelLabel
                 color: "#4A4949"
                 text: qsTr("Log level") + translationManager.emptyString
                 fontSize: 16
+                anchors.topMargin: 30
+                Layout.topMargin: 30
             }
-
+        }
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: "#DEDEDE"
+        }
+        ColumnLayout {
             ComboBox {
                 id: logLevel
                 model: [0,1,2,3,4,"custom"]
@@ -369,7 +473,7 @@ Rectangle {
         RowLayout {
             Label {
                 color: "#4A4949"
-                text: qsTr("Version") + translationManager.emptyString
+                text: qsTr("Debug info") + translationManager.emptyString
                 fontSize: 16
                 anchors.topMargin: 30
                 Layout.topMargin: 30
@@ -381,19 +485,95 @@ Rectangle {
             color: "#DEDEDE"
         }
 
-        Label {
-            id: guiVersion
+        TextBlock {
             Layout.topMargin: 8
-            color: "#4A4949"
+            Layout.fillWidth: true
             text: qsTr("GUI version: ") + Version.GUI_VERSION + translationManager.emptyString
-            fontSize: 16
         }
 
-        Label {
+        TextBlock {
             id: guiMoneroVersion
-            color: "#4A4949"
+            Layout.fillWidth: true
             text: qsTr("Embedded Ditcoin version: ") + Version.GUI_MONERO_VERSION + translationManager.emptyString
-            fontSize: 16
+        }
+        TextBlock {
+            id: restoreHeightText
+            Layout.fillWidth: true
+            textFormat: Text.RichText
+            property var txt: "<style type='text/css'>a {text-decoration: none; color: #12b20E}</style>" + qsTr("Wallet creation height: ") + currentWallet.walletCreationHeight + translationManager.emptyString
+            property var linkTxt: qsTr(" <a href='#'>(Click to change)</a>") + translationManager.emptyString
+            text: (typeof currentWallet == "undefined") ? "" : txt + linkTxt
+
+            onLinkActivated: {
+                restoreHeightRow.visible = true;
+            }
+
+        }
+
+        RowLayout {
+            id: restoreHeightRow
+            visible: false
+            LineEdit {
+                id: restoreHeight
+                Layout.preferredWidth: 80
+                Layout.fillWidth: true
+                text: currentWallet.walletCreationHeight
+                validator: IntValidator {
+                    bottom:0
+                }
+            }
+
+            StandardButton {
+                id: restoreHeightSave
+                Layout.fillWidth: false
+                Layout.leftMargin: 30
+                text: qsTr("Save") + translationManager.emptyString
+                shadowReleasedColor: "#05CE00"
+                shadowPressedColor: "#0B8008"
+                releasedColor: "#12b20E"
+                pressedColor: "#05CE00"
+
+                onClicked: {
+                    currentWallet.walletCreationHeight = restoreHeight.text
+                    // Restore height is saved in .keys file. Set password to trigger rewrite.
+                    currentWallet.setPassword(appWindow.password)
+                    restoreHeightRow.visible = false
+
+                    // Show confirmation dialog
+                    confirmationDialog.title = qsTr("Rescan wallet cache") + translationManager.emptyString;
+                    confirmationDialog.text  = qsTr("Are you sure you want to rebuild the wallet cache?\n"
+                                                    + "The following information will be deleted\n"
+                                                    + "- Recipient addresses\n"
+                                                    + "- Tx keys\n"
+                                                    + "- Tx descriptions\n\n"
+                                                    + "The old wallet cache file will be renamed and can be restored later.\n"
+                                                    );
+                    confirmationDialog.icon = StandardIcon.Question
+                    confirmationDialog.cancelText = qsTr("Cancel")
+                    confirmationDialog.onAcceptedCallback = function() {
+                        walletManager.closeWallet();
+                        walletManager.clearWalletCache(persistentSettings.wallet_path);
+                        walletManager.openWalletAsync(persistentSettings.wallet_path, appWindow.password,
+                                                          persistentSettings.testnet);
+                    }
+
+                    confirmationDialog.onRejectedCallback = null;
+
+                    confirmationDialog.open()
+
+                }
+            }
+        }
+
+
+
+        TextBlock {
+            Layout.fillWidth: true
+            text:  (typeof currentWallet == "undefined") ? "" : qsTr("Wallet log path: ") + currentWallet.walletLogPath + translationManager.emptyString
+        }
+        TextBlock {
+            Layout.fillWidth: true
+            text:  (typeof currentWallet == "undefined") ? "" : qsTr("Daemon log path: ") + currentWallet.daemonLogPath + translationManager.emptyString
         }
     }
 
@@ -413,11 +593,22 @@ Rectangle {
 
         onAccepted: {
             if(appWindow.password === settingsPasswordDialog.password){
-                informationPopup.title  = qsTr("Wallet mnemonic seed") + translationManager.emptyString;
-                informationPopup.text = currentWallet.seed
-                informationPopup.open()
-                informationPopup.onCloseCallback = function() {
-                    informationPopup.text = ""
+                if(currentWallet.seedLanguage == "") {
+                    console.log("No seed language set. Using English as default");
+                    currentWallet.setSeedLanguage("English");
+                }
+
+                seedPopup.title  = qsTr("Wallet seed & keys") + translationManager.emptyString;
+                seedPopup.text = "<b>Wallet Mnemonic seed</b> <br>" + currentWallet.seed
+                        + "<br><br> <b>" + qsTr("Secret view key") + ":</b> " + currentWallet.secretViewKey
+                        + "<br><b>" + qsTr("Public view key") + ":</b> " + currentWallet.publicViewKey
+                        + "<br><b>" + qsTr("Secret spend key") + ":</b> " + currentWallet.secretSpendKey
+                        + "<br><b>" + qsTr("Public spend key") + ":</b> " + currentWallet.publicSpendKey
+                seedPopup.open()
+                seedPopup.width = 600
+                seedPopup.height = 300
+                seedPopup.onCloseCallback = function() {
+                    seedPopup.text = ""
                 }
 
             } else {
@@ -437,17 +628,93 @@ Rectangle {
 
     }
 
+    StandardDialog {
+        id: seedPopup
+        cancelVisible: false
+        okVisible: true
+        width:600
+        height:400
+
+        property var onCloseCallback
+        onAccepted:  {
+            if (onCloseCallback) {
+                onCloseCallback()
+            }
+        }
+    }
+
+    // Choose blockchain folder
+    FileDialog {
+        id: blockchainFileDialog
+        title: qsTr("Please choose a folder") + translationManager.emptyString;
+        selectFolder: true
+        folder: "file://" + persistentSettings.blockchainDataDir
+
+        onAccepted: {
+            var dataDir = walletManager.urlToLocalPath(blockchainFileDialog.fileUrl)
+            var validator = daemonManager.validateDataDir(dataDir);
+            if(!validator.valid) {
+
+                confirmationDialog.title = qsTr("Warning") + translationManager.emptyString;
+                confirmationDialog.text = "";
+                if(validator.readOnly) {
+                    confirmationDialog.text  += qsTr("Error: Filesystem is read only") + "\n\n"                  
+                }
+                
+                if(validator.storageAvailable < 20) {
+                    confirmationDialog.text  += qsTr("Warning: There's only %1 GB available on the device. Blockchain requires ~%2 GB of data.").arg(validator.storageAvailable).arg(15) + "\n\n"     
+                } else {
+                    confirmationDialog.text  += qsTr("Note: There's %1 GB available on the device. Blockchain requires ~%2 GB of data.").arg(validator.storageAvailable).arg(15) + "\n\n"
+                }
+                
+                if(!validator.lmdbExists) {
+                    confirmationDialog.text  += qsTr("Note: lmdb folder not found. A new folder will be created.") + "\n\n" 
+                }
+   
+
+                confirmationDialog.icon = StandardIcon.Question
+                confirmationDialog.cancelText = qsTr("Cancel")
+
+                // Continue
+                confirmationDialog.onAcceptedCallback = function() {
+                    persistentSettings.blockchainDataDir = dataDir
+                }
+
+                // Cancel
+                confirmationDialog.onRejectedCallback = function() {
+                };
+
+                confirmationDialog.open()
+            } else {
+                persistentSettings.blockchainDataDir = dataDir
+            }
+
+            delete validator;
+
+
+        }
+        onRejected: {
+            console.log("data dir selection canceled")
+        }
+
+    }
+
     // fires on every page load
     function onPageCompleted() {
         console.log("Settings page loaded");
         initSettings();
         viewOnly = currentWallet.viewOnly;
-        appWindow.daemonRunning =  daemonManager.running(persistentSettings.testnet)
+
+        if(typeof daemonManager != "undefined")
+            appWindow.daemonRunning =  daemonManager.running(persistentSettings.testnet)
     }
 
     // fires only once
     Component.onCompleted: {
-        daemonManager.daemonConsoleUpdated.connect(onDaemonConsoleUpdated)
+        if(typeof daemonManager != "undefined")
+            daemonManager.daemonConsoleUpdated.connect(onDaemonConsoleUpdated)
+
+
     }
 
     function onDaemonConsoleUpdated(message){

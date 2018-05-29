@@ -45,7 +45,7 @@ Rectangle {
     property bool showAdvanced: false
 
     function scaleValueToMixinCount(scaleValue) {
-        var scaleToMixinCount = [4,5,6,7,8,9,10,11,12,13,14,15,20,25];
+        var scaleToMixinCount = [4,5,6,7,8,9,10,11,12,14,16,18,21,25];
         if (scaleValue < scaleToMixinCount.length) {
             return scaleToMixinCount[scaleValue];
         } else {
@@ -183,12 +183,16 @@ Rectangle {
       }
 
 
+      // Note: workaround for translations in listElements
+      // ListElement: cannot use script for property value, so
+      // code like this wont work:
+      // ListElement { column1: qsTr("LOW") + translationManager.emptyString ; column2: ""; priority: PendingTransaction.Priority_Low }
+      // For translations to work, the strings need to be listed in
+      // the file components/StandardDropdown.qml too.
 
+      // Priorities before v5
       ListModel {
            id: priorityModel
-           // ListElement: cannot use script for property value, so
-           // code like this wont work:
-           // ListElement { column1: qsTr("LOW") + translationManager.emptyString ; column2: ""; priority: PendingTransaction.Priority_Low }
 
            ListElement { column1: qsTr("Low (x1 fee)") ; column2: ""; priority: PendingTransaction.Priority_Low }
            ListElement { column1: qsTr("Medium (x20 fee)") ; column2: ""; priority: PendingTransaction.Priority_Medium }
@@ -199,10 +203,10 @@ Rectangle {
       ListModel {
            id: priorityModelV5
 
-           ListElement { column1: qsTr("Low (x1 fee)") ; column2: ""; priority: 1}
-           ListElement { column1: qsTr("Default (x4 fee)") ; column2: ""; priority: 2 }
-           ListElement { column1: qsTr("Medium (x20 fee)") ; column2: ""; priority: 3 }
-           ListElement { column1: qsTr("High (x166 fee)")  ; column2: "";  priority: 4 }
+           ListElement { column1: qsTr("Slow (x0.25 fee)") ; column2: ""; priority: 1}
+           ListElement { column1: qsTr("Default (x1 fee)") ; column2: ""; priority: 2 }
+           ListElement { column1: qsTr("Fast (x5 fee)") ; column2: ""; priority: 3 }
+           ListElement { column1: qsTr("Fastest (x41.5 fee)")  ; column2: "";  priority: 4 }
 
        }
 
@@ -434,15 +438,6 @@ Rectangle {
         enabled: !viewOnly || pageRoot.enabled
 
         RowLayout {
-//            Label {
-//                id: manageWalletLabel
-//                Layout.fillWidth: true
-//                color: "#4A4949"
-//                text: qsTr("Advanced options") + translationManager.emptyString
-//                fontSize: 16
-//                Layout.topMargin: 20
-//            }
-
             CheckBox {
                 id: showAdvancedCheckbox
                 checked: persistentSettings.transferShowAdvanced
@@ -462,7 +457,6 @@ Rectangle {
             color: "#DEDEDE"
             Layout.bottomMargin: 30
         }
-
 
         RowLayout {
             visible: persistentSettings.transferShowAdvanced
@@ -493,9 +487,13 @@ Rectangle {
         }
 
 
-        RowLayout {
+        GridLayout {
             visible: persistentSettings.transferShowAdvanced
             Layout.topMargin: 50
+
+
+            columns: (isMobile) ? 2 : 6
+
             StandardButton {
                 id: sweepUnmixableButton
                 text: qsTr("Sweep Unmixable") + translationManager.emptyString
@@ -560,34 +558,7 @@ Rectangle {
                     submitTxDialog.open();
                 }
             }
-
-            StandardButton {
-                id: rescanSpentButton
-                text: qsTr("Rescan spent") + translationManager.emptyString
-                shadowReleasedColor: "#05CE00"
-                shadowPressedColor: "#0B8008"
-                releasedColor: "#12b20E"
-                pressedColor: "#05CE00"
-                enabled: pageRoot.enabled
-                onClicked: {
-                    if (!currentWallet.rescanSpent()) {
-                        console.error("Error: ", currentWallet.errorString);
-                        informationPopup.title = qsTr("Error") + translationManager.emptyString;
-                        informationPopup.text  = qsTr("Error: ") + currentWallet.errorString
-                        informationPopup.icon  = StandardIcon.Critical
-                        informationPopup.onCloseCallback = null
-                        informationPopup.open();
-                    } else {
-                        informationPopup.title = qsTr("Information") + translationManager.emptyString
-                        informationPopup.text  = qsTr("Sucessfully rescanned spent outputs") + translationManager.emptyString
-                        informationPopup.icon  = StandardIcon.Information
-                        informationPopup.onCloseCallback = null
-                        informationPopup.open();
-                    }
-                }
-            }
         }
-
 
     }
 
@@ -714,15 +685,9 @@ Rectangle {
     }
 
     function updatePriorityDropdown() {
-        // Use new fee multipliers after v5 fork
-        if (typeof currentWallet != "undefined" && currentWallet.useForkRules(5)) {
-            priorityDropdown.dataModel = priorityModelV5;
-            priorityDropdown.currentIndex = 1
-        } else {
-            priorityDropdown.dataModel = priorityModel;
-            priorityDropdown.currentIndex = 0
-        }
-
+        priorityDropdown.dataModel = priorityModelV5;
+        priorityDropdown.currentIndex = 1
+        priorityDropdown.update()
     }
 
     //TODO: Add daemon sync status

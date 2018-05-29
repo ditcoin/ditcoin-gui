@@ -259,11 +259,11 @@ ListView {
                 //elide: Text.ElideRight
                 font.family: "Arial"
                 font.pixelSize: 13
-                color:  (confirmations < 10)? "#12b20E" : "#545454"
+                color:  (confirmations < confirmationsRequired)? "#12b20E" : "#545454"
                 text: {
                     if (!isPending)
-                        if(confirmations < 10)
-                            return blockHeight + " " + qsTr("(%1/10 confirmations)").arg(confirmations)
+                        if(confirmations < confirmationsRequired)
+                            return blockHeight + " " + qsTr("(%1/%2 confirmations)").arg(confirmations).arg(confirmationsRequired)
                         else
                             return blockHeight
                     if (!isOut)
@@ -443,7 +443,7 @@ ListView {
         id: dropModel
         ListElement { name: "<b>Copy address to clipboard</b>"; icon: "../images/dropdownCopy.png" }
         ListElement { name: "<b>Add to address book</b>"; icon: "../images/dropdownAdd.png" }
-        ListElement { name: "<b>Send to same destination</b>"; icon: "../images/dropdownSend.png" }
+        ListElement { name: "<b>Send to this address</b>"; icon: "../images/dropdownSend.png" }
         ListElement { name: "<b>Find similar transactions</b>"; icon: "../images/dropdownSearch.png" }
     }
 

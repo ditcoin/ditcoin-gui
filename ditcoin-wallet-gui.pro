@@ -79,19 +79,22 @@ SOURCES = *.qml \
 ios:armv7 {
     message("target is armv7")
     LIBS += \
-        -L$$PWD/ofxiOSBoost/build/libs/boost/lib/armv7 \
+        -L$$PWD/../ofxiOSBoost/build/libs/boost/lib/armv7 \
 }
 ios:arm64 {
     message("target is arm64")
     LIBS += \
-        -L$$PWD/ofxiOSBoost/build/libs/boost/lib/arm64 \
+        -L$$PWD/../ofxiOSBoost/build/libs/boost/lib/arm64 \
 }
 !ios {
 LIBS += -L$$WALLET_ROOT/lib \
         -lwallet_merged \
         -lepee \
-        -lunbound
+        -lunbound \
+        -leasylogging \
+        -lreadline \
 }
+
 
 ios {
     message("Host is IOS")
@@ -105,7 +108,8 @@ ios {
         -lunbound
 
     LIBS+= \
-        -L$$PWD/OpenSSL-for-iPhone/lib \
+        -L$$PWD/../OpenSSL-for-iPhone/lib \
+        -L$$PWD/../ofxiOSBoost/build/libs/boost/lib/arm64 \
         -lboost_serialization \
         -lboost_thread \
         -lboost_system \
@@ -279,6 +283,7 @@ macx {
 
 # translation stuff
 TRANSLATIONS =  \ # English is default language, no explicit translation file
+                $$PWD/translations/monero-core.ts \ # translation source (copy this file when creating a new translation)
                 $$PWD/translations/monero-core_ar.ts \ # Arabic
                 $$PWD/translations/monero-core_pt-br.ts \ # Portuguese (Brazil)
                 $$PWD/translations/monero-core_de.ts \ # German
@@ -294,8 +299,12 @@ TRANSLATIONS =  \ # English is default language, no explicit translation file
                 $$PWD/translations/monero-core_nl.ts \ # Dutch
                 $$PWD/translations/monero-core_pl.ts \ # Polish
                 $$PWD/translations/monero-core_ru.ts \ # Russian
+                $$PWD/translations/monero-core_sv.ts \ # Swedish
                 $$PWD/translations/monero-core_zh-cn.ts \ # Chinese (Simplified-China)
                 $$PWD/translations/monero-core_zh-tw.ts \ # Chinese (Traditional-Taiwan)
+                $$PWD/translations/monero-core_he.ts \ # Hebrew
+                $$PWD/translations/monero-core_ko.ts \ # Korean
+                $$PWD/translations/monero-core_ro.ts \ # Romanian
 
 CONFIG(release, debug|release) {
     DESTDIR = release/bin
@@ -357,6 +366,7 @@ macx {
 PRE_TARGETDEPS += langupd compiler_langrel_make_all
 
 RESOURCES += qml.qrc
+CONFIG += qtquickcompiler
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -390,7 +400,8 @@ OTHER_FILES += \
 
 DISTFILES += \
     notes.txt \
-    monero/src/wallet/CMakeLists.txt
+    monero/src/wallet/CMakeLists.txt \
+    components/MobileHeader.qml
 
 
 # windows application icon

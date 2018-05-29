@@ -41,6 +41,13 @@ class Wallet : public QObject
     Q_PROPERTY(AddressBookModel * addressBookModel READ addressBookModel)
     Q_PROPERTY(AddressBook * addressBook READ addressBook)
     Q_PROPERTY(bool viewOnly READ viewOnly)
+    Q_PROPERTY(QString secretViewKey READ getSecretViewKey)
+    Q_PROPERTY(QString publicViewKey READ getPublicViewKey)
+    Q_PROPERTY(QString secretSpendKey READ getSecretSpendKey)
+    Q_PROPERTY(QString publicSpendKey READ getPublicSpendKey)
+    Q_PROPERTY(QString daemonLogPath READ getDaemonLogPath CONSTANT)
+    Q_PROPERTY(QString walletLogPath READ getWalletLogPath CONSTANT)
+    Q_PROPERTY(quint64 walletCreationHeight READ getWalletCreationHeight WRITE setWalletCreationHeight NOTIFY walletCreationHeightChanged)
 
 public:
 
@@ -231,6 +238,18 @@ public:
     // check if fork rules should be used
     Q_INVOKABLE bool useForkRules(quint8 version, quint64 earlyBlocks = 0) const;
 
+    //! Get wallet keys
+    QString getSecretViewKey() const {return QString::fromStdString(m_walletImpl->secretViewKey());}
+    QString getPublicViewKey() const {return QString::fromStdString(m_walletImpl->publicViewKey());}
+    QString getSecretSpendKey() const {return QString::fromStdString(m_walletImpl->secretSpendKey());}
+    QString getPublicSpendKey() const {return QString::fromStdString(m_walletImpl->publicSpendKey());}
+
+    quint64 getWalletCreationHeight() const {return m_walletImpl->getRefreshFromBlockHeight();}
+    void setWalletCreationHeight(quint64 height);
+
+    QString getDaemonLogPath() const;
+    QString getWalletLogPath() const;
+
     // TODO: setListenter() when it implemented in API
 signals:
     // emitted on every event happened with wallet
@@ -246,6 +265,7 @@ signals:
     void unconfirmedMoneyReceived(const QString &txId, quint64 amount);
     void newBlock(quint64 height, quint64 targetHeight);
     void historyModelChanged() const;
+    void walletCreationHeightChanged();
 
     // emitted when transaction is created async
     void transactionCreated(PendingTransaction * transaction, QString address, QString paymentId, quint32 mixinCount);

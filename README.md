@@ -9,6 +9,11 @@ Copyright (c) 2017, The Ditcoin Project
 - Github: [https://github.com/ditcoin/ditcoin-gui](https://github.com/ditcoin/ditcoin-gui)
 - IRC: [#ditcoin-dev on Freenode](irc://chat.freenode.net/#ditcoin-dev)
 
+## Vulnerability Response
+
+- Our [Vulnerability Response Process](https://github.com/monero-project/meta/blob/master/VULNERABILITY_RESPONSE_PROCESS.md) encourages responsible disclosure
+- We are also available via [HackerOne](https://hackerone.com/monero)
+
 ## Introduction
 
 As Cryptonote/Monero based technology, Ditcoin is a private, secure, untraceable, decentralised digital currency. You are your bank, you control your funds, and nobody can trace your transfers unless you allow them to do so.
@@ -49,26 +54,27 @@ Packaging for your favorite distribution would be a welcome contribution!
 
 ### On Linux:
 
-(Tested on Ubuntu 16.04 x86, 16.10 x64 and Linux Mint 18 "Sarah" - Cinnamon x64)
+(Tested on Ubuntu 16.04 x86, 16.10 x64, Gentoo x64 and Linux Mint 18 "Sarah" - Cinnamon x64)
 
 1. Install Ditcoin dependencies.
 
+  - For Ubuntu and Mint
+
 	`sudo apt install build-essential cmake libboost-all-dev miniupnpc libunbound-dev graphviz doxygen libunwind8-dev pkg-config libssl-dev`
 
-2. Grab an up-to-date copy of the ditcoin-gui repository.
+  - For Gentoo
+
+	`sudo emerge app-arch/xz-utils app-doc/doxygen dev-cpp/gtest dev-libs/boost dev-libs/expat dev-libs/openssl dev-util/cmake media-gfx/graphviz net-dns/unbound net-libs/ldns net-libs/miniupnpc sys-libs/libunwind`
+
+2. Grab an up-to-date copy of the ditcoin-gui repository
 
 	`git clone https://github.com/ditcoin/ditcoin-gui.git`
 
-3. Go into the repository.
+3. Go into the repository
 
 	`cd ditcoin-gui`
 
-4. Use the script to compile the Ditcoin libs necessary to run the GUI.
-
-	`./get_libwallet_api.sh`
-
-
-5. Install the GUI dependencies.
+4. Install the GUI dependencies
 
   - For Ubuntu 16.04 x86
 
@@ -76,23 +82,39 @@ Packaging for your favorite distribution would be a welcome contribution!
 
   - For Ubuntu 16.04+ x64
 
-     `sudo apt-get install qtbase5-dev qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-xmllistmodel qttools5-dev-tools qml-module-qtquick-dialogs qml-module-qt-labs-settings libqt5qml-graphicaleffects`
+    `sudo apt-get install qtbase5-dev qt5-default qtdeclarative5-dev qml-module-qtquick-controls qml-module-qtquick-xmllistmodel qttools5-dev-tools qml-module-qtquick-dialogs qml-module-qt-labs-settings libqt5qml-graphicaleffects`
 
   - For Linux Mint 18 "Sarah" - Cinnamon x64
 
-     `sudo apt install qml-module-qt-labs-settings qml-module-qtgraphicaleffects`
+    `sudo apt install qml-module-qt-labs-settings qml-module-qtgraphicaleffects`
+
+  - For Gentoo
+
+    `sudo emerge dev-qt/qtcore:5 dev-qt/qtdeclarative:5 dev-qt/qtquickcontrols:5 dev-qt/qtquickcontrols2:5 dev-qt/qtgraphicaleffects:5`
 
   - Optional : To build the flag `WITH_SCANNER`
 
-     `sudo apt install qtmultimedia5-dev qml-module-qtmultimedia libzbar-dev`
+    - For Ubuntu and Mint
 
-6. Build the GUI.
+      `sudo apt install qtmultimedia5-dev qml-module-qtmultimedia libzbar-dev`
+
+    - For Gentoo
+
+      The *qml* USE flag must be enabled.
+
+      `emerge dev-qt/qtmultimedia:5 media-gfx/zbar`
+
+5. Build the GUI
+
+  - For Ubuntu and Mint
 
 	`./build.sh`
 
-7. Run the GUI client.
+  - For Gentoo
 
-	`./build/release/bin/ditcoin-wallet-gui`
+    `QT_SELECT=5 ./build.sh`
+
+The executable can be found in the build/release/bin folder.
 
 ### On OS X:
 
@@ -114,30 +136,21 @@ Packaging for your favorite distribution would be a welcome contribution!
   
   `brew link --force --overwrite qt5`
 
-4. Install latest Qt using official installer from [qt.io](https://www.qt.io/download-open-source/) (homebrew version might be outdated).
-5. Add Qt bin dir to your path (check first if directory exists; 5.8 is the current version)
+5. Add the Qt bin directory to your path
 
-    `export PATH=$PATH:$HOME/Qt/5.8/clang_64/bin`
+    Example: `export PATH=$PATH:$HOME/Qt/5.8/clang_64/bin`
 
-5. Add Qt bin dir to your path.  Example:
+    This is the directory where Qt 5.x is installed on **your** system
 
-    `export PATH=$PATH:/usr/local/opt/qt5/bin`
-
-    make sure this is where Qt 5.x is installed on **your** system eg `$HOME/Qt/5.8/clang_64/bin` if you downloaded from qt.io.
-
-6. Grab an up-to-date copy of the ditcoin-gui repository.
+6. Grab an up-to-date copy of the monero-core repository
 
   `git clone https://github.com/ditcoin/ditcoin-gui.git`
 
-7. Go into the repository.
+7. Go into the repository
 
   `cd ditcoin-gui`
 
-8. Build libwallet
-
-  `./get_libwallet_api.sh`
-
-9. Start the build:
+8. Start the build
 
   `./build.sh`
 
@@ -145,7 +158,7 @@ The executable can be found in the `build/release/bin` folder.
 
 **Note:** Workaround for "ERROR: Xcode not set up properly"
 
-Edit `$HOME/Qt/5.7/clang_64/mkspecs/features/mac/default_pre.prf`
+Edit `$HOME/Qt/5.8/clang_64/mkspecs/features/mac/default_pre.prf`
 
 replace
 `isEmpty($$list($$system("/usr/bin/xcrun -find xcrun 2>/dev/null")))`
@@ -167,26 +180,26 @@ More info: http://stackoverflow.com/a/35098040/1683164
 
    ```
 
-3. Install git into msys2 environment:
+3. Install git into msys2 environment
 
     ```
     pacman -S git
     ```
 
-4. Install Qt5 from [official site](https://www.qt.io/download-open-source/).
+4. Install Qt5 from [official site](https://www.qt.io/download-open-source/)
    - download unified installer, run and select following options:
        - Qt > Qt 5.7 > MinGW 5.3.0 32 bit
        - Tools > MinGW 5.3.0
    - continue with installation
 
-5. Open ```MinGW-w64 Win32 Shell``` shell:
+5. Open ```MinGW-w64 Win32 Shell``` shell
 
    ```%MSYS_ROOT%\msys2_shell.cmd -mingw32```
 
    Where ```%MSYS_ROOT%``` will be ```c:\msys32``` if your host OS is x86-based or ```c:\msys64``` if your host OS
    is x64-based
 
-6. Install the latest version of boost, specificly the required static libraries:
+6. Install the latest version of boost, specificly the required static libraries
     ```
     cd
     wget http://sourceforge.net/projects/boost/files/boost/1.63.0/boost_1_63_0.tar.bz2
@@ -196,13 +209,13 @@ More info: http://stackoverflow.com/a/35098040/1683164
     ./b2 --prefix=/mingw32/boost --layout=tagged --without-mpi --without-python toolset=gcc address-model=32 variant=debug,release link=static threading=multi runtime-link=static -j$(nproc) install
     ```
 
-7. Clone repository:
+7. Clone repository
     ```
     cd
     git clone https://github.com/ditcoin/ditcoin-gui.git
     ```
 
-8. Build the GUI:
+8. Build the GUI
     ```
     cd ditcoin-gui
     export PATH=$(ls -rd /c/Qt/5.[6,7,8]/mingw53_32/bin | head -1):$PATH
@@ -210,4 +223,5 @@ More info: http://stackoverflow.com/a/35098040/1683164
     cd build
     make deploy
     ```
-    The resulting executable can be found in ```.\release\bin```
+
+The executable can be found in the ```.\release\bin``` directory.

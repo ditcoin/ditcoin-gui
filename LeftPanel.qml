@@ -67,11 +67,12 @@ Rectangle {
         menuColumn.previousButton.checked = true
     }
 
-    width: 260
+    width: (isMobile)? appWindow.width : 260
     color: "#FFFFFF"
 
     // Item with ditcoin logo
     Item {
+        visible: !isMobile
         id: logoItem
         anchors.left: parent.left
         anchors.right: parent.right
@@ -115,7 +116,9 @@ Rectangle {
     }
 
 
+
     Column {
+        visible: !isMobile
         id: column1
         anchors.left: parent.left
         anchors.right: parent.right
@@ -124,14 +127,15 @@ Rectangle {
         spacing: 5
 
         Label {
+            visible: !isMobile
             id: balanceLabel
             text: qsTr("Balance") + translationManager.emptyString
             anchors.left: parent.left
             anchors.leftMargin: 50
-            tipText: qsTr("Test tip 1<br/><br/>line 2") + translationManager.emptyString
         }
 
         Row {
+            visible: !isMobile
             Item {
                 anchors.verticalCenter: parent.verticalCenter
                 height: 26
@@ -144,6 +148,7 @@ Rectangle {
             }
 
             Text {
+                visible: !isMobile
                 id: balanceText
                 anchors.verticalCenter: parent.verticalCenter
                 font.family: "Arial"
@@ -172,7 +177,6 @@ Rectangle {
             text: qsTr("Unlocked balance") + translationManager.emptyString
             anchors.left: parent.left
             anchors.leftMargin: 50
-            tipText: qsTr("Test tip 2<br/><br/>line 2") + translationManager.emptyString
         }
 
         Text {
@@ -194,6 +198,7 @@ Rectangle {
         }
     }
 
+
     Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
@@ -210,16 +215,26 @@ Rectangle {
         color: "#DBDBDB"
     }
 
+
+
     Rectangle {
         id: menuRect
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.top: column1.bottom
-        anchors.topMargin: 25
+        anchors.top: (isMobile)? parent.top : column1.bottom
+        anchors.topMargin: (isMobile)? 0 : 25
         color: "#0F1C0D"
 
+
+        Flickable {
+            contentHeight: 500
+            anchors.fill: parent
+            clip: true
+
+
         Column {
+
             id: menuColumn
             anchors.left: parent.left
             anchors.right: parent.right
@@ -460,6 +475,16 @@ Rectangle {
                     panel.settingsClicked()
                 }
             }
+            Rectangle {
+                visible: settingsButton.present
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.leftMargin: 16
+                color: "#505050"
+                height: 1
+            }
+
+        }
 
         }
 
@@ -478,6 +503,9 @@ Rectangle {
             anchors.bottom: parent.bottom
         }
     }
+
+
+
     // indicate disabled state
 //    Desaturate {
 //        anchors.fill: parent

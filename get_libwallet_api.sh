@@ -15,8 +15,8 @@ BUILD_LIBWALLET=false
 if [ ! -d $MONERO_DIR/src ]; then
     git submodule init ditcoin
 fi
-git submodule update
-git -C $MONERO_DIR fetch --tags
+git submodule update --remote
+git -C $MONERO_DIR fetch
 git -C $MONERO_DIR checkout v0.13.0
 
 # get ditcoin core tag
@@ -226,6 +226,8 @@ fi
 # build install epee
 eval make -C $MONERO_DIR/build/release/contrib/epee all install
 
+# install easylogging
+eval make -C $MONERO_DIR/build/release/external/easylogging++ all install
 
 # Install libunwind
 echo "Installing libunbound..."

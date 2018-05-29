@@ -120,6 +120,7 @@ Rectangle {
 
 
     Text {
+        visible: !isMobile
         id: filterHeaderText
         anchors.left: parent.left
         anchors.right: parent.right
@@ -135,6 +136,7 @@ Rectangle {
     }
 
     Label {
+        visible: !isMobile
         id: selectedAmount
         anchors.right: parent.right
         anchors.top: parent.top
@@ -142,7 +144,6 @@ Rectangle {
         anchors.topMargin: 17
         text: getSelectedAmount()
         fontSize: 14
-        tipText: qsTr("<b>Total amount of selected payments</b>") + translationManager.emptyString
     }
 
 
@@ -156,7 +157,6 @@ Rectangle {
         anchors.topMargin: 17
         text: qsTr("Address")
         fontSize: 14
-        tipText: qsTr("<b>Tip tekst test</b>") + translationManager.emptyString
     }
 
     LineEdit {
@@ -172,6 +172,7 @@ Rectangle {
 
     // Filter by string
     LineEdit {
+        visible: !isMobile
         id: searchLine
         anchors.left: parent.left
         anchors.right: parent.right
@@ -196,7 +197,6 @@ Rectangle {
         anchors.topMargin: 17
         text: qsTr("Description <font size='2'>(Local database)</font>") + translationManager.emptyString
         fontSize: 14
-        tipText: qsTr("<b>Tip tekst test</b><br/><br/>test line 2") + translationManager.emptyString
     }
 
     LineEdit {
@@ -213,6 +213,7 @@ Rectangle {
 
     // DateFrom picker
     Label {
+        visible: !isMobile
         id: dateFromText
         anchors.left: parent.left
         anchors.top:  searchLine.bottom // descriptionLine.bottom
@@ -221,10 +222,10 @@ Rectangle {
         width: 156
         text: qsTr("Date from") + translationManager.emptyString
         fontSize: 14
-        tipText: qsTr("<b>Tip tekst test</b>") + translationManager.emptyString
     }
 
     DatePicker {
+        visible: !isMobile
         id: fromDatePicker
         anchors.left: parent.left
         anchors.top: dateFromText.bottom
@@ -239,6 +240,7 @@ Rectangle {
 
     // DateTo picker
     Label {
+        visible: !isMobile
         id: dateToText
         anchors.left: dateFromText.right
         anchors.top:  searchLine.bottom //descriptionLine.bottom
@@ -246,10 +248,10 @@ Rectangle {
         anchors.topMargin: 17
         text: qsTr("To") + translationManager.emptyString
         fontSize: 14
-        tipText: qsTr("<b>Tip tekst test</b>") + translationManager.emptyString
     }
 
     DatePicker {
+        visible: !isMobile
         id: toDatePicker
         anchors.left: fromDatePicker.right
         anchors.top: dateToText.bottom
@@ -265,6 +267,7 @@ Rectangle {
 
 
     StandardButton {
+        visible: !isMobile
         id: filterButton
         anchors.bottom: toDatePicker.bottom
         anchors.left: toDatePicker.right
@@ -306,6 +309,7 @@ Rectangle {
     }
 
     CheckBox {
+        visible: !isMobile
         id: advancedFilteringCheckBox
         text: qsTr("Advanced filtering") + translationManager.emptyString
         anchors.left: filterButton.right
@@ -320,6 +324,7 @@ Rectangle {
     }
 
     Label {
+        visible: !isMobile
         id: transactionTypeText
         anchors.left: parent.left
         anchors.top: fromDatePicker.bottom
@@ -328,7 +333,6 @@ Rectangle {
         width: 156
         text: qsTr("Type of transaction") + translationManager.emptyString
         fontSize: 14
-        tipText: qsTr("<b>Tip tekst test</b>") + translationManager.emptyString
     }
 
     ListModel {
@@ -340,6 +344,7 @@ Rectangle {
     }
 
     StandardDropdown {
+        visible: !isMobile
         id: transactionTypeDropdown
         anchors.left: parent.left
         anchors.top: transactionTypeText.bottom
@@ -355,6 +360,7 @@ Rectangle {
     }
 
     Label {
+        visible: !isMobile
         id: amountFromText
         anchors.left: transactionTypeText.right
         anchors.top: fromDatePicker.bottom
@@ -363,10 +369,10 @@ Rectangle {
         width: 156
         text: qsTr("Amount from") + translationManager.emptyString
         fontSize: 14
-        tipText: qsTr("<b>Tip tekst test</b>") + translationManager.emptyString
     }
 
     LineEdit {
+        visible: !isMobile
         id: amountFromLine
         anchors.left: transactionTypeDropdown.right
         anchors.top: amountFromText.bottom
@@ -387,6 +393,7 @@ Rectangle {
     }
 
     Label {
+        visible: !isMobile
         id: amountToText
         anchors.left: amountFromText.right
         anchors.top: fromDatePicker.bottom
@@ -395,10 +402,10 @@ Rectangle {
         width: 156
         text: qsTr("To") + translationManager.emptyString
         fontSize: 14
-        tipText: qsTr("<b>Tip tekst test</b>") + translationManager.emptyString
     }
 
     LineEdit {
+        visible: !isMobile
         id: amountToLine
         anchors.left: amountFromLine.right
         anchors.top: amountToText.bottom
@@ -420,6 +427,7 @@ Rectangle {
     }
 
     Item {
+        visible: !isMobile
         id: expandItem
         property bool expanded: false
 
@@ -449,16 +457,17 @@ Rectangle {
 
     Rectangle {
         id: tableRect
-        property int expandedHeight: parent.height - filterHeaderText.y - filterHeaderText.height - 17
+        property int expandedHeight: parent.height - filterHeaderText.y - filterHeaderText.height - 5
         property int middleHeight: parent.height - fromDatePicker.y - fromDatePicker.height - 17
         property int collapsedHeight: parent.height - transactionTypeDropdown.y - transactionTypeDropdown.height - 17
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+//        anchors.top: parent.top
         color: "#FFFFFF"
         z: 1
 
-        height: middleHeight
+        height: (isMobile)? parent.height : middleHeight
         onHeightChanged: {
             if(height === middleHeight) z = 1
             else if(height === collapsedHeight) z = 0
